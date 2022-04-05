@@ -7,6 +7,7 @@ import time
 import sys
 import random
 from bs4 import BeautifulSoup
+import re
 
 user_agents = ['AppleWebKit/605.1.15',
                'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0',
@@ -161,18 +162,19 @@ def __WohnungsBoerse(url):
 def __Immowelt(url):
     immow_page = get_beautiful_soup(url)
     # Most recent offer
-    results = immow_page.find("div", attrs={"class": "iw_list_content"})
-    newest_ad = results.find("div", attrs={"class": "listitem"})
-    ad_content = newest_ad.find("div", attrs={"class": "listcontent"})
+    results = immow_page.find("div", attrs={"class": re.compile("SearchList-*")})
+    newest_ad = results.find("div", attrs={"class": re.compile("EstateItem-*")})
+    ad_content = newest_ad.find("div", attrs={"class": re.compile("FactsSection-*")})
     # Title
     title = newest_ad.find("h2").get_text()
     # URL
-    link = get_netloc(url) + newest_ad.find("a").get("href")
+    link = newest_ad.find("a").get("href")
     # Rent
-    hard_fact = ad_content.find("div", attrs={"class": "hardfact price_rent"})
-    rent = hard_fact.find("strong").get_text().strip()
+    hard_fact = ad_content.find("div", attrs={"class": re.compile("KeyFacts-*")})
+    rent = hard_fact.find("div").get_text().strip()
     # Location
-    location = ad_content.find("div", {"class": "listlocation"}).get_text().strip()
+    location_container = ad_content.find("div", {"class": re.compile("estateFacts-*")})
+    location = location_container.find("span").get_text().strip()
     # Process data
     ad = {"title": title, "url": link, "rent": rent, "location": location, "time": get_time_stamp()}
     return ad
