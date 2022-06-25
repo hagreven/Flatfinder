@@ -163,28 +163,30 @@ def __Immowelt(url):
     immow_page = get_beautiful_soup(url)
     # Most recent offer
     results = immow_page.find("div", attrs={"class": re.compile("SearchList-*")})
-    newest_ad = results.find("div", attrs={"class": re.compile("EstateItem-*")})
-    ad_content = newest_ad.find("div", attrs={"class": re.compile("FactsSection-*")})
-    # Title
-    title = newest_ad.find("h2").get_text()
-    # URL
-    link = newest_ad.find("a").get("href")
-    # Rent
-    hard_fact = ad_content.find("div", attrs={"class": re.compile("KeyFacts-*")})
-    rent = hard_fact.find("div").get_text().strip()
-    # Location
-    location_container = ad_content.find("div", {"class": re.compile("estateFacts-*")})
-    location = location_container.find("span").get_text().strip()
-    # Process data
-    ad = {"title": title, "url": link, "rent": rent, "location": location, "time": get_time_stamp()}
-    return ad
+    if results:
+      newest_ad = results.find("div", attrs={"class": re.compile("EstateItem-*")})
+      ad_content = newest_ad.find("div", attrs={"class": re.compile("FactsSection-*")})
+      # Title
+      title = newest_ad.find("h2").get_text()
+      # URL
+      link = newest_ad.find("a").get("href")
+      # Rent
+      hard_fact = ad_content.find("div", attrs={"class": re.compile("KeyFacts-*")})
+      rent = hard_fact.find("div").get_text().strip()
+      # Location
+      location_container = ad_content.find("div", {"class": re.compile("estateFacts-*")})
+      location = location_container.find("span").get_text().strip()
+      # Process data
+      ad = {"title": title, "url": link, "rent": rent, "location": location, "time": get_time_stamp()}
+      return ad
+    return results
 
 # Has bot checker functionality
 def __ImmoScout24(url):
     immoc_page = get_beautiful_soup(url)
     # Most recent offer
-    ads = immoc_page.find("div", attrs={"id": "listings"})
-    newest_ad = ads.find("article", attrs={"class": "result-list-entry"})
+    ads = immoc_page.find("ul", attrs={"class": "result-list"})
+    newest_ad = ads.find("article", attrs={"class": "result-list__listing"})
     # Title
     header = newest_ad.find("h5", attrs={"class": "result-list-entry__brand-title"}).get_text().strip()
     title = header[3:]

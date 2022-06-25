@@ -153,8 +153,9 @@ def loop():
                         offer = makeOfferUnicode(offer)
                         if checkBlacklist(offer):
                             notify(offer)
+                            print("Found new flat in " + offer['location'] + ", " + time.strftime("%A, %e. %B at %H:%M"))
                 else:
-                    print("Failed to parse website. "
+                    print("Did not find any offers on this site. "
                           "You may want to check the code in WebsiteParser.py for correct behaviour of bs4")
         time.sleep(conf.interval)
 
