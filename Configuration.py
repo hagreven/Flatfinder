@@ -23,7 +23,7 @@ class Configuration(object):
     def __readConfig(self, config):
         # Mail
         try:
-            self.useMail = True
+            self.useMail = config.get("E-Mail", "useMail") == "True"
             self.smtpMail = config.get("E-Mail", "Address")
             self.smtpServer = config.get("E-Mail", "SMTP-Server")
             self.smtpPort = config.get("E-Mail", "SMTP-Port")
@@ -85,7 +85,7 @@ class Configuration(object):
             print("The URL for 'WG Gesucht (1-Zimmerwohnung)' is not valid.")
             self.urlWGGesucht1ZimmerWohnung = ""
 
-        if not "www.wg-gesucht.de/wohnungen" in self.urlWGGesuchtWohnung and len(self.urlWGGesuchtWohnung) > 0:
+        if not "www.wg-gesucht.de/wg-zimmer-" in self.urlWGGesuchtWohnung and len(self.urlWGGesuchtWohnung) > 0:
             print("The URL for 'WG Gesucht' is not valid.")
             self.urlWGGesuchtWohnung = ""
 
