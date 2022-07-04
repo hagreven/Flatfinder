@@ -8,7 +8,7 @@ import sys
 class Configuration(object):
     def __init__(self, filename):
         config = configparser.RawConfigParser()
-        config.read(filename)
+        config.read(filename, encoding="utf-8")
         self.__readConfig(config)
         self.__checkValidity()
         # Maps idetifiers to their URLs
