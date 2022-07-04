@@ -146,7 +146,7 @@ def __WohnungsBoerse(url):
     # Title
     title = headline.find("a").get("title")
     # Link
-    link = get_netloc(url) + headline.find("a").get("href")
+    link = headline.find("a").get("href")
     # Rent
     props = newest_ad.find("div", attrs={"class": "search_result_entry-objectproperties"})
     rent = "".join(props.find("dd").get_text().strip().split())
