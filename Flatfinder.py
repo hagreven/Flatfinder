@@ -73,8 +73,8 @@ def notify(offer):
 # Checks weather the offer is okay
 def checkBlacklist(offer):
     for blackword in conf.blacklist:
-        if blackword in offer['location'].lower(): return False
-        if blackword in offer['title'].lower(): return False
+        if blackword in offer['location'].lower(): print("EXCLUDE:", offer["url"], "because of blacklisted location", blackword); return False
+        if blackword in offer['title'].lower(): print("EXCLUDE:", offer["url"], "because of blackword", blackword, "in title"); return False
     return True
 
 # Converts the given text to unicode
@@ -154,9 +154,10 @@ def loop():
                         if checkBlacklist(offer):
                             notify(offer)
                             print("Found new flat in " + offer['location'] + ", " + time.strftime("%A, %e. %B at %H:%M"))
+                            print("Offer url:", offer["url"])
                 else:
-                    print("Did not find any offers on this site. "
-                          "You may want to check the code in WebsiteParser.py for correct behaviour of bs4")
+                    print("Did not find any offers on site " + url +
+                          ". You may want to check the code in WebsiteParser.py for correct behaviour of bs4")
         time.sleep(conf.interval)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
